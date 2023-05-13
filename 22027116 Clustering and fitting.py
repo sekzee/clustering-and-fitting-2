@@ -53,7 +53,7 @@ countries_to_remove = ['East Asia & Pacific (excluding high income) ',
 'Latin America & Caribbean (excluding high income)',
 'IDA only','Latin America & the Caribbean (IDA & IBRD countries)','Sub-Saharan Africa (IDA & IBRD countries) ', 'Early-demographic dividend', 'Pre-demographic dividend', 'Low & middle income', 'Africa Eastern and Southern', 'East Asia & Pacific (excluding high income)', 'Euro area', 'Latin America & Caribbean', 'Africa Eastern and Southern', 'World', 'Sub-Saharan Africa (IDA & IBRD countries)']
 
-# The countries are expelled from the DataFrame
+# The countries are removed from the DataFrame
 df_selected = df_selected[~df_selected.index.isin(countries_to_remove)]
 
 # Print the resulting DataFrame
@@ -74,7 +74,7 @@ GDP_per_cap1_fit = GDP_per_cap1[["1980", "2020"]].copy()
 
 # normalise dataframe and inspect result
 # normalisation is done only on the extract columns. .copy() prevents
-# changes in df_fit to affect df_fish. This makes the plots with the
+# changes in GDP_fit to affect GDP_fit. This makes the plots with the
 # original measurements
 GDP_per_cap1_fit, df_min, df_max = ct.scaler(GDP_per_cap1_fit)
 print(GDP_per_cap1_fit.describe())
@@ -114,6 +114,13 @@ plt.xlabel("1960")
 plt.ylabel("2020")
 plt.title("CLUSTER GDP OF COUNTRIES")
 plt.show()
+
+def read_population_data(file_path):
+    df_pop = pd.read_csv(file_path, skiprows=4)
+    df_pop = df_pop.dropna().drop(['Indicator Code', 'Country Code', 'Indicator Name'], axis=1)
+    df_pop.set_index('Country Name', drop=True, inplace=True)
+    return df_pop
+
 
 # Read the World Bank population data into a dataframe
 df_pop = pd.read_csv("Pop_world_data.csv", skiprows=4)
